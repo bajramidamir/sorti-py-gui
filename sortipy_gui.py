@@ -1,26 +1,25 @@
-import tkinter as tk
-from tkinter import filedialog
 import os
 import shutil
+from pathlib import Path
+import tkinter as tk
+from tkinter import filedialog
 
-def sort(path):
-	lista = os.listdir(path)
-	for f in lista:
+
+def sort(current_dir):
+	output_dir = os.path.join(current_dir, '')
+	Path(output_dir).mkdir(exist_ok=True)
+
+	for f in os.listdir(current_dir):
+		if not os.path.isfile(os.path.join(current_dir, f)):
+			continue
 		name, ext = os.path.splitext(f)
 		ext = ext[1:]
-
-		if ext == "":
-			continue
-
-		if os.path.exists(path + "/" + ext):
-			shutil.move(path + "/" + f, path + "/" + ext + "/")
-	
-		else:
-			os.makedirs(path + "/" + ext)
-			shutil.move(path + "/" + f, path + "/" + ext + "/")
-
-	success = tk.Label(window, text = "Success!", font = "Consolas")
-	success.pack()
+		fpath = os.path.join(current_dir, f)
+		ext_output_dir = os.path.join(output_dir, ext, '')
+		if not ext:
+			ext_output_dir = os.path.join(output_dir, 'noextension', '')
+		Path(ext_output_dir).mkdir(exist_ok=True)
+		shutil.move(fpath, ext_output_dir)
 
 
 def dir_prompt():
@@ -28,8 +27,7 @@ def dir_prompt():
 	sort(path_entry)
 
 
-# / / / / / / / / / / /
-# tkinter defs
+# /////////////// Tkinter defs
 window = tk.Tk()
 window.geometry("500x200")
 window.title("Sorti-Py")
