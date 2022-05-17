@@ -9,10 +9,7 @@ def sort(current_dir):
 	output_dir = os.path.join(current_dir, '')
 	Path(output_dir).mkdir(exist_ok=True)
 
-	for f in os.listdir(current_dir):
-		if os.path.isfile(os.path.join(current_dir, f)):
-			f+= "_new"
-			
+	for f in os.listdir(current_dir):	
 		if not os.path.isfile(os.path.join(current_dir, f)):
 			continue
 			
@@ -23,7 +20,14 @@ def sort(current_dir):
 		if not ext:
 			ext_output_dir = os.path.join(output_dir, 'noextension', '')
 		Path(ext_output_dir).mkdir(exist_ok=True)
-		shutil.move(fpath, ext_output_dir)
+		
+		# try to move 
+		try:
+			shutil.move(fpath, ext_output_dir)
+		# catch exception when we have two files with the same name, rename the second one and move
+		except shutil.Error:
+			shutil.move(fpath, os.path.join(ext_output_dir, name + "_new" + "." + ext))
+		
 
 
 def dir_prompt():
