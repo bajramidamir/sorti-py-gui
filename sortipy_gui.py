@@ -10,8 +10,12 @@ def sort(current_dir):
 	Path(output_dir).mkdir(exist_ok=True)
 
 	for f in os.listdir(current_dir):
+		if os.path.isfile(os.path.join(current_dir, f)):
+			f+= "_new"
+			
 		if not os.path.isfile(os.path.join(current_dir, f)):
 			continue
+			
 		name, ext = os.path.splitext(f)
 		ext = ext[1:]
 		fpath = os.path.join(current_dir, f)
